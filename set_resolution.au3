@@ -2,7 +2,7 @@
 #AutoIt3Wrapper_UseX64=y
 ;#EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 
-#include <APIConstants.au3>		;needed for variables $DM_PELSWIDTH, $DM_PELSHEIGHT, $DM_BITSPERPEL, $DM_DISPLAYFREQUENCY, $WM_DISPLAYCHANGE
+#include <APIConstants.au3>     ; needed for variables $DM_PELSWIDTH, $DM_PELSHEIGHT, $DM_BITSPERPEL, $DM_DISPLAYFREQUENCY, $WM_DISPLAYCHANGE
 
 $width  = IniRead(@ScriptDir & "\settings.ini", "ResolutionSettings", "width",  1280);
 $height = IniRead(@ScriptDir & "\settings.ini", "ResolutionSettings", "height", 720);

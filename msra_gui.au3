@@ -1,6 +1,6 @@
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_UseX64=y
-#AutoIt3Wrapper_icon=msra_gui.ico
+#AutoIt3Wrapper_icon=icons\msra_gui.ico
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 
 ;DOS command: msra /offerra [address] (address may be host name or IP)
@@ -17,7 +17,7 @@ Dim $objDomain
 Dim $objComputer
 Dim $strComputers
 
-$domain   = "sarwin2k";
+$domain   = "DOMAIN";
 $app_width = 450; pixels
 
 $objShell = ObjCreate("WScript.Shell");

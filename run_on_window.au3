@@ -7,8 +7,8 @@
 
 ; Match title by any substring found
 Opt("WinTitleMatchMode", 2);
-Opt('TrayIconDebug', 1);        Set to 1 to view current line in tray icon via tooltip
-Opt('TrayIconHide', 0);         Set to 1 to hide the tray icon
+Opt('TrayIconDebug',     1);    Set to 1 to view current line in tray icon via tooltip
+Opt('TrayIconHide',      0);    Set to 1 to hide the tray icon
 
 $totalParams = $CmdLine[0];     Set a default
 $debug       = false;           Prints passed args to MsgBox when true

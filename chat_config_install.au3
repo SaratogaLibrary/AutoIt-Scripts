@@ -1,5 +1,4 @@
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
-#AutoIt3Wrapper_outfile=C:\Users\bkozlowski.SARWIN2K\Desktop\chat_config.exe
 #AutoIt3Wrapper_UseX64=n
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 

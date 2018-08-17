@@ -2,31 +2,31 @@
 #AutoIt3Wrapper_icon=icons\My Files.ico
 #AutoIt3Wrapper_UseX64=n
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
-#include <ButtonConstants.au3>		; form controls
-#include <Constants.au3>			; text type (ex: @CRLF)
-#include <EditConstants.au3>		; form controls
-#include <GUIConstantsEx.au3>		; form generation
-#include <Process.au3>				; _Run command
-#include <StaticConstants.au3>		;
-#include <WindowsConstants.au3>		;
-#include <WinAPI.au3>				; Set focus
+#include <ButtonConstants.au3>      ; form controls
+#include <Constants.au3>            ; text type (ex: @CRLF)
+#include <EditConstants.au3>        ; form controls
+#include <GUIConstantsEx.au3>       ; form generation
+#include <Process.au3>              ; _Run command
+#include <StaticConstants.au3>      ;
+#include <WindowsConstants.au3>     ;
+#include <WinAPI.au3>               ; Set focus
 
-;Opt('TrayIconDebug', 1);			Show tooltip in tray icon for current executing line
-Opt('WinTitleMatchMode', 2);		Match window title by any substring
+;Opt('TrayIconDebug', 1);           Show tooltip in tray icon for current executing line
+Opt('WinTitleMatchMode', 2);        Match window title by any substring
 
 ; Give myself some credit for this little utility
 ;TraySetToolTip('My Files provides access to your personal files from any computer.' & chr(13) & 'Programmer: Brendon Kozlowski');
 
 ; --- APPLICATION SETTINGS AND DEFAULTS --- ;
-$default_domain = IniRead("myfiles.ini", "ServerSettings", "default_domain", "");		Pre-filled data for domain box in form
+$default_domain = IniRead("myfiles.ini", "ServerSettings", "default_domain", "");               Pre-filled data for domain box in form
 $server_name    = IniRead("myfiles.ini", "ServerSettings", "server_name",    "");
 $server_ip      = IniRead("myfiles.ini", "ServerSettings", "server_ip",      "");
-$share_path     = IniRead("myfiles.ini", "ServerSettings", "share_path",     "");	Path to specific server share from root (with trailing slash)
-$use_ip_mapping = IniRead("myfiles.ini", "ShareSettings",  "use_ip_mapping", True);				Use IP to map network drive (false for server name)
-$drive_letter   = IniRead("myfiles.ini", "ShareSettings",  "drive_letter",   "Q");				Drive letter to map to
+$share_path     = IniRead("myfiles.ini", "ServerSettings", "share_path",     "");               Path to specific server share from root (with trailing slash)
+$use_ip_mapping = IniRead("myfiles.ini", "ShareSettings",  "use_ip_mapping", True);             Use IP to map network drive (false for server name)
+$drive_letter   = IniRead("myfiles.ini", "ShareSettings",  "drive_letter",   "Q");              Drive letter to map to
 
-$winHandle = '';					Declare the variable globally for use in multiple methods later
-$is_mapped = false;					Used to determine whether we've mapped the drive or not (to prevent msgbox from showing on close event if no drive's been mapped)
+$winHandle = '';                    Declare the variable globally for use in multiple methods later
+$is_mapped = false;                 Used to determine whether we've mapped the drive or not (to prevent msgbox from showing on close event if no drive's been mapped)
 
 ; Create the form
 $form = GUICreate("Share Permissions", 346, 178, 192, 124)
@@ -93,10 +93,10 @@ Func MapDrive()
 
 		; DriveMapAdd returns 1 on success, 0 on failure
 		If ($output == 1) Then
-			sleep(1000);									Give it time to fully map the drive before attempting to open it
+			sleep(1000);                                    Give it time to fully map the drive before attempting to open it
 			_RunDos('explorer '& $drive_letter & ':\');
-			WinWaitActive($waitActiveWindow);				Wait for the window to open
-			$winHandle = WinGetHandle($waitActiveWindow);	Get the window handle to know which window to close for UnmapDrive (requirement from included library)
+			WinWaitActive($waitActiveWindow);               Wait for the window to open
+			$winHandle = WinGetHandle($waitActiveWindow);   Get the window handle to know which window to close for UnmapDrive (requirement from included library)
 
 			; set the is_mapped flag
 			$is_mapped = true;

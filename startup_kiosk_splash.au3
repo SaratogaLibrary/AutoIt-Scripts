@@ -1,5 +1,4 @@
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
-#AutoIt3Wrapper_Outfile=C:\Users\bkozlowski.SARWIN2K\Desktop\splash_on_timer.exe
 ;#AutoIt3Wrapper_UseX64=n
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 
