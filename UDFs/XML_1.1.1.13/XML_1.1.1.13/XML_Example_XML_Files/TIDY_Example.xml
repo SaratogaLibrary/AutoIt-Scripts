@@ -1,0 +1,18 @@
+<Checkin>
+	<Item CatalogID="ID_15674">
+		<SUPPLIER_NAME_STRING id="ID1014_161"/>
+		<BRANDNAME_STRING id="ID1043_111"/>
+		<QRYTEXT_STRING id="ID1082_8519"/>
+		<RARITY_STATUS id="ID1164_2"/>
+		<ARTID value="27700"/>
+		<SUPPLIER_NUMBER value="127700"/>
+		<OFFSET_ID value="ID_22265"/>
+		<STAMP value="256/350"/>
+		<STYLE value="1"/>
+		<IS_PROMOTIONAL value="0"/>
+	</Item>
+	<Item CatalogID="ID_15675">
+		<SUPPLIER_NUMBER value="389844"/>
+		<OFFSET_ID value="ID_15674"/>
+		<IS_COMPLETED/> </Item>
+</Checkin>

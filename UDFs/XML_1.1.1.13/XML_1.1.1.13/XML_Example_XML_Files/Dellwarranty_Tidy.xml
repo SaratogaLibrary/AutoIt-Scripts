@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AssetWarrantyDTO xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Dell.Support.AssetsExternalAPI.Web.Models.V1.Response">
+  <AdditionalInformation i:nil="true" />
+  <AssetWarrantyResponse>
+    <AssetWarrantyResponse>
+      <AssetEntitlementData>
+        <AssetEntitlement>
+          <EndDate>2015-05-13T18:59:59</EndDate>
+          <EntitlementType>INITIAL</EntitlementType>
+          <ItemNumber>999-99999</ItemNumber>
+          <ServiceLevelCode>ND</ServiceLevelCode>
+          <ServiceLevelDescription>Next Business Day Onsite</ServiceLevelDescription>
+          <ServiceLevelGroup>5</ServiceLevelGroup>
+          <ServiceProvider i:nil="true" />
+          <StartDate>2012-05-12T19:00:00</StartDate>
+        </AssetEntitlement>
+      </AssetEntitlementData>
+      <AssetHeaderData>
+        <BUID>808</BUID>
+        <CountryLookupCode>DE</CountryLookupCode>
+        <CustomerNumber>9994444</CustomerNumber>
+        <IsDuplicate>false</IsDuplicate>
+        <ItemClassCode>RS004</ItemClassCode>
+        <LocalChannel>GAMG9</LocalChannel>
+        <MachineDescription>Latitude E6420</MachineDescription>
+        <OrderNumber>223334444</OrderNumber>
+        <ParentServiceTag i:nil="true" />
+        <ServiceTag>333444</ServiceTag>
+        <ShipDate>2012-05-12T19:00:00</ShipDate>
+      </AssetHeaderData>
+      <ProductHeaderData>
+        <LOB>Latitude</LOB>
+        <LOBFriendlyName>Latitude</LOBFriendlyName>
+        <ProductFamily>Laptops</ProductFamily>
+        <ProductId>latitude-e6420</ProductId>
+        <SystemDescription>Latitude E6420</SystemDescription>
+      </ProductHeaderData>
+    </AssetWarrantyResponse>
+  </AssetWarrantyResponse>
+  <ExcessTags>
+    <BadAssets xmlns:d3p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  </ExcessTags>
+  <InvalidBILAssets>
+    <BadAssets xmlns:d3p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  </InvalidBILAssets>
+  <InvalidFormatAssets>
+    <BadAssets xmlns:d3p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  </InvalidFormatAssets>
+</AssetWarrantyDTO>

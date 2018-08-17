@@ -1,0 +1,21 @@
+<Checkin>
+    <Service Day="Sunday">
+        <Time Hour="7">
+
+            <Computer Station="101CHECKIN">
+                <Code>7168</Code>
+                <Mode>Assisted</Mode>
+            </Computer>
+
+            <Computer Station="211HALLCHECKIN">
+                <Code>1668</Code>
+                <Mode>Self</Mode>
+            </Computer>
+
+            <Computer Station="ACCESS01">
+                <Code>4248</Code>
+                <Mode>Assisted</Mode>
+            </Computer>
+        </Time>
+    </Service>
+</Checkin>
