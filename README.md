@@ -1,4 +1,4 @@
-# AutoIT-Scripts
+# AutoIt-Scripts
 A collection of scripts used for automating or simplifying certain tasks with library software/tools using the [AutoIt Scripting language and compiler](https://www.autoitscript.com/site/).
 
 1. [IconMap.au3](<https://github.com/SaratogaLibrary/AutoIT-Scripts/blob/master/IconMap.au3>)  
