@@ -6,7 +6,7 @@
 #include <StaticConstants.au3>
 #include <GUIConstantsEx.au3>
 #include <GDIPlus.au3>				; Fixes issue with odd transparent pixels w/normal AutoIt image/background methods
-#include ".\UDFs\BlockInputEx.au3"	; Attempts to block ALT+TAB from working (works in XP, sort of mimics it in >= Vista
+#include ".\UDFs\BlockInputEx\BlockInputEx.au3"	; Attempts to block ALT+TAB from working (works in XP, sort of mimics it in >= Vista
 
 Opt('TrayIconDebug',  0);   Set to 1 to view current line in tray icon via tooltip
 Opt('TrayIconHide',   1);   Set to 1 to hide the tray icon
@@ -17,7 +17,7 @@ Opt("GUIOnEventMode", 1);   Can call an event on action (like button click)
 $seconds_to_display    = IniRead(@ScriptDir & "\settings.ini", "SplashScreenSettings", "time_delay_secs",       10);
 $background_color      = IniRead(@ScriptDir & "\settings.ini", "SplashScreenSettings", "background_color",      "000000");
 $splash_image          = IniRead(@ScriptDir & "\settings.ini", "SplashScreenSettings", "splash_image",          "images\splash.jpg")
-$image_width           = IniRead(@ScriptDir & "\settings.ini", "SplashScreenSettings", "image_width",           @DesktopHeight);
+$image_width           = IniRead(@ScriptDir & "\settings.ini", "SplashScreenSettings", "image_width",           @DesktopWidth);
 $image_height          = IniRead(@ScriptDir & "\settings.ini", "SplashScreenSettings", "image_height",          @DesktopHeight);
 $window_title          = IniRead(@ScriptDir & "\settings.ini", "SplashScreenSettings", "window_title",          "Usage Policy");
 $left = (@DesktopWidth - $image_width) / 2;         Image centering placement
