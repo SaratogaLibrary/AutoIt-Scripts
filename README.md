@@ -1,5 +1,5 @@
 # AutoIT-Scripts
-A collection of scripts used for automating or simplifying certain tasks with library software/tools.
+A collection of scripts used for automating or simplifying certain tasks with library software/tools using the [AutoIt Scripting language and compiler](https://www.autoitscript.com/site/).
 
 1. [IconMap.au3](<https://github.com/SaratogaLibrary/AutoIT-Scripts/blob/master/IconMap.au3>)  
    This tool allows the saving and restoring of icon positioning on the Windows Desktop. It's much easier and faster than manually clicking, dragging, and reordering of icons to match a particular layout scheme. Note: _IconMap is a command line tool._  
