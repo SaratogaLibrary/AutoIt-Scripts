@@ -74,3 +74,8 @@ A collection of scripts used for automating or simplifying certain tasks with li
 
 15. [startup_kiosk_splash.au3](<https://github.com/SaratogaLibrary/AutoIT-Scripts/blob/master/startup_kiosk_splash.au3>)  
     On run, will wait to detect a window being closed, once closed it will display a kiosk-style informational interface to the user using an image. Configurable values include the time to display, name of application to wait for, image filename, background color of the kiosk interface, and the image's width and height (to be able to center it on the screen; by default it expects the image to be the full size of the resolution).
+
+16. [user_backups.au3](<https://github.com/SaratogaLibrary/AutoIT-Scripts/blob/master/user_backups.au3>)
+    A fairly simple program written to help expediate the monotonous efforts of finding and backing up user's personalized settings files for various programs offered to staff in the library.
+    
+    ![screenshot of user_backups main window](./../screenshots/user_backups.png?raw=true "User Backups")
