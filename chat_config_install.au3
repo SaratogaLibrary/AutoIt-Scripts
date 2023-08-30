@@ -1,11 +1,15 @@
+#NoTrayIcon
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
-#AutoIt3Wrapper_UseX64=n
+#AutoIt3Wrapper_UseX64=N ;Pidgin is a 32-bit application, this causes @ProgramFilesDir to point correctly
+#AutoIt3Wrapper_Outfile=C:\Users\bkozlowski\Desktop\chat_setup.exe
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 
+#RequireAdmin
+#include <AutoItConstants.au3>
 #include <MsgBoxConstants.au3>
-#include ".\UDFs\XML_1.1.1.13\XML_1.1.1.13\XML.au3"
+#include <WinAPIError.au3>
+#include "D:\backups\Scripts\AutoIT\UDFs\XML_1.1.1.13\XML_1.1.1.13\XML.au3"
 
-#NoTrayIcon
 
 ; ==============================================================================================================================
 ; Title .........: chat_config_install.au3
@@ -16,7 +20,7 @@
 ; ==============================================================================================================================
 
 ; Steps:
-; 1. Set User Environment Variable (PURPLEHOME); set to My Documents\pidgin_config_<username> (will create config folder [.purple] inside location declared as PURPLEHOME)
+; 1. Gather user account info
 ; 2. Install Pidgin
 ; 3. Copy config files to user's PURPLEHOME/.purple directory
 ; 4. Edit necessary portions of newly copied config files
@@ -25,6 +29,18 @@
 ; 1. Username
 ; 2. Password
 ; 3. Domain (optional)
+
+; Set program runtime options
+Opt("SendKeyDelay", 20);
+
+; Get config variable information
+$APP    = IniRead(@ScriptDir & "\config.ini", "PidginConfigSettings", "exe_name",     "pidgin-2.11.0-offline.msi");
+$PATH   = IniRead(@ScriptDir & "\config.ini", "PidginConfigSettings", "exe_location", @WorkingDir & '\');
+$TITLE  = IniRead(@ScriptDir & "\config.ini", "PidginConfigSettings", "title",        "Buddy List");
+$GROUP  = IniRead(@ScriptDir & "\config.ini", "PidginConfigSettings", "chat_group",   "Chat Rooms");
+$CHAT   = IniRead(@ScriptDir & "\config.ini", "PidginConfigSettings", "chat_name",    "sspl-general");
+$PASS   = IniRead(@ScriptDir & "\config.ini", "PidginConfigSettings", "chat_pass",    "Tz3RAWjg4oUdPBkwwHLdbQ==");
+;$DOMAIN = IniRead(@ScriptDir & "\config.ini", "PidginConfigSettings", "user_domain",  "SSPL");
 
 ; Assign initial variables for pidgin account information
 $pidginUsername = "";
@@ -47,10 +63,21 @@ If @Compiled Then
 			$pidginPassword = $CmdLine[2];
 			$pidginDomain   = $CmdLine[3];
 		Case Else
-			$pidginUsername = InputBox("Configuration: Username", "Please enter the username provided to you:");
-			$pidginPassword = InputBox("Configuration: Password", "Please enter the password provided to you:", "", "*");
-			$pidginDomain   = InputBox("Configuration: Domain",   "If provided, please enter the domain (otherwise leave blank):");
+			$pidginUsername = InputBox("Configuration: Username", "Please enter the username:");
+			$pidginPassword = InputBox("Configuration: Password", "Please enter the password:", "", "*");
+			; $pidginDomain   = InputBox("Configuration: Domain",   "If provided, please enter the domain (otherwise leave blank):");
+			$pidginDomain   = 'libraryh3lp.com';
 	EndSwitch
+Else
+	$pidginUsername = InputBox("Configuration: Username", "Please enter the username:");
+	$pidginPassword = InputBox("Configuration: Password", "Please enter the password:", "", "*");
+	; $pidginDomain   = InputBox("Configuration: Domain",   "If provided, please enter the domain (otherwise leave blank):");
+	$pidginDomain   = 'libraryh3lp.com';
+EndIf
+
+If $pidginUsername = '' OR $pidginPassword = '' Then
+	MsgBox($MB_SYSTEMMODAL + $MB_ICONERROR, 'Exiting...', 'User cancelled, exiting setup.', 3);
+	Exit;
 EndIf
 
 ;;;;;;;;;;
@@ -58,27 +85,42 @@ EndIf
 ;;;;;;;;;;
 
 ; Find the My Documents location, then append 'pidgin_config' to the path, and create it
-$purplePath = @MyDocumentsDir & '\pidgin_config_' & $pidginUsername;
-DirCreate($purplePath);
+;$purplePath = @MyDocumentsDir & '\pidgin_config_' & $pidginUsername;
+;DirCreate($purplePath);
 
 ; Set the registry
-RegWrite('HKEY_CURRENT_USER\Environment', 'PURPLEHOME', 'REG_SZ', $purplePath);
+;RegWrite('HKEY_CURRENT_USER\Environment', 'PURPLEHOME', 'REG_SZ', $purplePath);
+
+; Default Config/Files Install Location
+$purplePath = @AppDataDir;
 
 
 ;;;;;;;;;;
 ; STEP 2 ;
 ;;;;;;;;;;
 
-SplashTextOn("Chat Install", "Please wait while the" & @CRLF & "application is installed.", -1, -1, -1, -1, 32, "", 24)
-RunAsWait("Username", "DOMAIN", "Password", 0, 'msiexec /q /i "Full (shared server) path to pidgin MSI installation file" ');
-ControlSetText("Chat Install", "", "Static1", "Application installed. Please wait" & @CRLF & "while it is now customized.")
+SplashTextOn("Chat Install", "Please wait while the application" & @CRLF & "is installed.", -1, -1, -1, -1, 32, "", 24);
+$return = RunWait('"' & $PATH & $APP & '" /DS=1 /SMS=0 /L=1033 /S');
+
+
+If @error Then
+	Local $sLastError = _WinAPI_GetLastErrorMessage();
+	MsgBox($MB_SYSTEMMODAL + $MB_ICONERROR, "Error", "Application has not Run :" & @CRLF & @CRLF & $sLastError);
+	Exit;
+EndIf
+
+ControlSetText("Chat Install", "", "Static1", "Application installed. Please wait" & @CRLF & "while it is now customized.");
 
 
 ;;;;;;;;;;
 ; STEP 3 ;
 ;;;;;;;;;;
 
-DirCopy('\\server_share\copy-of-default-.purple-directory\.purple', $purplePath & '\.purple');
+$copied = DirCopy($PATH & '.purple', $purplePath & '\.purple', $FC_OVERWRITE);
+If $copied = 0 Then
+	MsgBox($MB_SYSTEMMODAL + $MB_ICONINFORMATION, 'Error:', 'Error copying configuration files to User Roaming AppData location.', 5);
+	Exit;
+EndIf
 
 
 ;;;;;;;;;;
@@ -94,34 +136,75 @@ Local $sXML = $purplePath & '\.purple\accounts.xml';
 _XML_Load($oXML, $sXML);
 
 If @error Then
-	MsgBox($MB_SYSTEMMODAL + $MB_ICONINFORMATION, 'ERR:' & @error & ' EXT:' & @extended, XML_My_ErrorParser(@error, @extended))
-	MsgBox($MB_SYSTEMMODAL + $MB_ICONINFORMATION, '_XML_Load', _XML_ErrorParser_GetDescription($oXML))
-	Exit
+	MsgBox($MB_SYSTEMMODAL + $MB_ICONINFORMATION, 'ERR:' & @error & ' EXT:' & @extended, XML_My_ErrorParser(@error, @extended));
+	MsgBox($MB_SYSTEMMODAL + $MB_ICONINFORMATION, '_XML_Load', _XML_ErrorParser_GetDescription($oXML));
+	Exit;
 EndIf
 
-MsgBox($MB_SYSTEMMODAL + $MB_ICONINFORMATION, 'Pre-UpdateField', _XML_TIDY($oXML));
+; MsgBox($MB_SYSTEMMODAL + $MB_ICONINFORMATION, 'Pre-UpdateField', _XML_TIDY($oXML));
 _XML_UpdateField($oXml, '/account/account/name',     $pidginUsername & '@' & $pidginDomain & '/');
 _XML_UpdateField($oXml, '/account/account/password', $pidginPassword);
-MsgBox($MB_SYSTEMMODAL + $MB_ICONINFORMATION, 'Post-UpdateField', _XML_TIDY($oXML));
+; MsgBox($MB_SYSTEMMODAL + $MB_ICONINFORMATION, 'Post-UpdateField', _XML_TIDY($oXML));
 
 ; Create new accounts.xml file from new version in memory; must delete then create, XML lib doesn't support overwriting (by design)
-FileDelete($purplePath & '\.purple\accounts.xml')
-_XML_SaveToFile($oXML, $purplePath & '\.purple\accounts.xml');
+FileDelete($sXML);
+_XML_SaveToFile($oXML, $sXML);
 
+
+; 1. prefs.xml: Find plugin pathlist information and update to current user's path
+; 3. prefs.xml: Save
+Local $sContent  = FileRead($purplePath & '\.purple/prefs.xml');
+Local $sUserPath = AddDomain() ? @UserName & '.SSPL' : @UserName;
+$sContent = StringReplace($sContent, 'bkozlowski', $sUserPath);
+$sContent = StringReplace($sContent, "<pref name='theme' type='string' value='Default'/>", "<pref name='theme' type='string' value='Android Emoji Theme'/>");
+FileDelete($purplePath & '\.purple/prefs.xml');
+FileWrite($purplePath & '\.purple/prefs.xml', $sContent);
+
+; Add the Chat Rooms to the Client - must interact with the GUI to do so...
+Run(@ProgramFilesDir & "\Pidgin\pidgin.exe");
+WinWait($TITLE);
+WinActivate($TITLE);
+WinWaitActive($TITLE, "", 30);
+Sleep(5000);
+
+Send("!b");       Activate "Buddy" Menu
+Sleep(10);
+Send("h");        Add cHat
+Sleep(10);
+Send($CHAT);      channel name
+Sleep(10);
+Send("!p");       Focus password field
+Sleep(10);
+Send($PASS);      Password
+Sleep(10);
+Send("!g");       Focus group name
+Sleep(10);
+Send($GROUP);     Group name
+Sleep(10);
+Send("{TAB 2}");  Tab twice
+Sleep(10);
+Send("{SPACE}");  Activate checkbox
+Sleep(10);
+Send("{TAB}");    Tab once
+Sleep(10);
+Send("{SPACE}");  Activate checkbox
+Sleep(10);
+Send("{ENTER}");  OK/Apply settings
+Sleep(3000);
+Send("^q");       Quit Pidgin - settings are finalized
 
 ; End the script
-ControlSetText("Chat Install", "", "Static1", "All done! Thank you!")
+ControlSetText("Chat Install", "", "Static1", "All done! Thank you!");
 Sleep(5000);
 SplashOff();
-
 
 
 ; #FUNCTION# ====================================================================================================================
 ; Name ..........: XML_My_ErrorParser
 ; Description ...: Changing $XML_ERR_ ... to human readable description
 ; Syntax ........: XML_My_ErrorParser($iXMLWrapper_Error, $iXMLWrapper_Extended)
-; Parameters ....: $iXMLWrapper_Error	- an integer value.
-;                  $iXMLWrapper_Extended           - an integer value.
+; Parameters ....: $iXMLWrapper_Error	 - an integer value.
+;                  $iXMLWrapper_Extended - an integer value.
 ; Return values .: description as string
 ; Author ........: mLipok
 ; Modified ......:
@@ -164,7 +247,7 @@ Func XML_My_ErrorParser($iXMLWrapper_Error, $iXMLWrapper_Extended = 0)
 		Case $XML_ERR_PARAMETER
 			$sErrorInfo = '$XML_ERR_PARAMETER=' & $XML_ERR_PARAMETER & @CRLF & 'Wrong parameter passed to function.'
 		Case $XML_ERR_ARRAY
-			$sErrorInfo = '$XML_ERR_ARRAY=' & $XML_ERR_ARRAY & @CRLF & 'Wrong array parameter passed to function. Check array dimension and conent.'
+			$sErrorInfo = '$XML_ERR_ARRAY=' & $XML_ERR_ARRAY & @CRLF & 'Wrong array parameter passed to function. Check array dimension and content.'
 		Case $XML_ERR_XPATH
 			$sErrorInfo = '$XML_ERR_XPATH=' & $XML_ERR_XPATH & @CRLF & 'XPath syntax error - check also COM Error Handler.'
 		Case $XML_ERR_NONODESMATCH
@@ -212,7 +295,7 @@ Func XML_My_ErrorParser($iXMLWrapper_Error, $iXMLWrapper_Extended = 0)
 				Case $XML_EXT_ENCODING
 					$sExtendedInfo = '$XML_EXT_ENCODING=' & $XML_EXT_ENCODING & @CRLF & 'Encoding related Error'
 				Case Else
-					$sExtendedInfo = '$iXMLWrapper_Extended=' & $iXMLWrapper_Extended & @CRLF & 'NO ERROR DESCRIPTION FOR THIS @extened'
+					$sExtendedInfo = '$iXMLWrapper_Extended=' & $iXMLWrapper_Extended & @CRLF & 'NO ERROR DESCRIPTION FOR THIS @extended'
 			EndSwitch
 	EndSwitch
 	; return back @error and @extended for further debuging
@@ -225,4 +308,10 @@ Func XML_My_ErrorParser($iXMLWrapper_Error, $iXMLWrapper_Extended = 0)
 			'')
 
 EndFunc    ;==>XML_My_ErrorParser
-#EndRegion  XMLWrapperEx__Examples.au3 - XML DOM Error/Event Handling
+
+Func AddDomain()
+	Local $position  = StringInStr(@AppDataDir, @UserName);
+	Local $addDomain = (StringInStr(@AppDataDir, @UserName & '\') <> $position);
+
+	Return $addDomain;
+EndFunc
